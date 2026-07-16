@@ -127,6 +127,11 @@ SET_TARGET_PROPERTIES(cigicl-shared PROPERTIES
     VERSION ${VERSION}
     SOVERSION 1
 )
+target_include_directories(cigicl-shared PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+# Consumers of the shared library must see CCL_DLL (dllimport).
+target_compile_definitions(cigicl-shared INTERFACE CCL_DLL)
 
 #
 # Compiling the CCL as a static library
@@ -140,6 +145,9 @@ ELSE()
     SET_TARGET_PROPERTIES(cigicl-static PROPERTIES OUTPUT_NAME ccl_lib)
 ENDIF()
 SET_TARGET_PROPERTIES(cigicl-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+target_include_directories(cigicl-static PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
 
 #==========================================================
 # Install
@@ -161,3 +169,5 @@ INSTALL(FILES
 IF(CMAKE_COMPILER_IS_GNUCXX)
     INSTALL(FILES ${CMAKE_BINARY_DIR}/cigicl.pc DESTINATION lib/pkgconfig)
 ENDIF()
+
+add_subdirectory(examples)
