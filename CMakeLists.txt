@@ -28,7 +28,7 @@ SET(VERSION 4.0.2)
 #
 #============================================================================
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4.7)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.5.0)
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS 1)
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 IF(MSVC OR MINGW)
@@ -104,16 +104,16 @@ INCLUDE_DIRECTORIES(include)
 ADD_LIBRARY(cigicl-shared SHARED
 	${CCL_PUBLIC_HDRS}  ${CCL_HDRS_BASE} ${CCL_HDRS_V1} ${CCL_HDRS_V2} ${CCL_HDRS_V3} ${CCL_HDRS_V4}
 	${CCL_SRCS} ${CCL_SRCS_BASE} ${CCL_SRCS_V1} ${CCL_SRCS_V2} ${CCL_SRCS_V3} ${CCL_SRCS_V4})
-source_group("Header Files\BaseClasses"         FILES ${CCL_HDRS_BASE})
-source_group("Header Files\Version1"            FILES ${CCL_HDRS_V1})
-source_group("Header Files\Version2"            FILES ${CCL_HDRS_V2})
-source_group("Header Files\Version3"            FILES ${CCL_HDRS_V3})
-source_group("Header Files\Version4"            FILES ${CCL_HDRS_V4})
-source_group("Source Files\BaseClasses"         FILES ${CCL_SRCS_BASE})
-source_group("Source Files\Version1"            FILES ${CCL_SRCS_V1})
-source_group("Source Files\Version2"            FILES ${CCL_SRCS_V2})
-source_group("Source Files\Version3"            FILES ${CCL_SRCS_V3})
-source_group("Source Files\Version4"            FILES ${CCL_SRCS_V4})
+source_group("Header Files/BaseClasses"         FILES ${CCL_HDRS_BASE})
+source_group("Header Files/Version1"            FILES ${CCL_HDRS_V1})
+source_group("Header Files/Version2"            FILES ${CCL_HDRS_V2})
+source_group("Header Files/Version3"            FILES ${CCL_HDRS_V3})
+source_group("Header Files/Version4"            FILES ${CCL_HDRS_V4})
+source_group("Source Files/BaseClasses"         FILES ${CCL_SRCS_BASE})
+source_group("Source Files/Version1"            FILES ${CCL_SRCS_V1})
+source_group("Source Files/Version2"            FILES ${CCL_SRCS_V2})
+source_group("Source Files/Version3"            FILES ${CCL_SRCS_V3})
+source_group("Source Files/Version4"            FILES ${CCL_SRCS_V4})
 
 IF(MSVC OR MINGW)
     # Both the CCL_DLL and _CCL_EXPORTS_ defines are needed to export DLLs.
