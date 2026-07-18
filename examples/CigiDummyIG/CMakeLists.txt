@@ -22,3 +22,11 @@ target_link_libraries(${TARGET_NAME}
 if(WIN32)
     target_link_libraries(${TARGET_NAME} PRIVATE ws2_32)
 endif()
+
+add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/CigiDummyIG.def"
+        "$<TARGET_FILE_DIR:${TARGET_NAME}>/CigiDummyIG.def"
+    COMMENT "Copy CigiDummyIG.def next to ${TARGET_NAME}"
+)
+

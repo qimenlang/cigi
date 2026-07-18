@@ -119,6 +119,7 @@
 
 #include <iostream>
 #include <list>
+#include <string>
 
 #ifdef WIN32
 #include <Windows.h>
@@ -237,21 +238,56 @@ std::list<DbInfo *>::iterator idbl;
 // ================================================
 // Pre-declaration of Local routines
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-void ReadConfig(void);
+void ReadConfig(const std::string& configPath);
 int init_cigi_if(void);
 
+// Returns the absolute path of the running .exe on Windows (empty on failure).
+static std::string get_executable_path()
+{
+#ifdef WIN32
+   char buffer[MAX_PATH] = {};
+   DWORD n = GetModuleFileNameA(nullptr, buffer, MAX_PATH);
+   if (n == 0 || n >= MAX_PATH)
+      return {};
+   return std::string(buffer, n);
+#else
+   return {};
+#endif
+}
 
-
-
+// Directory containing the running .exe (no trailing slash).
+static std::string get_executable_dir()
+{
+   const std::string path = get_executable_path();
+   const std::string::size_type pos = path.find_last_of("\\/");
+   if (pos == std::string::npos)
+      return {};
+   return path.substr(0, pos);
+}
 
 // ================================================
 // Main
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 int main(int argc, char* argv[])
 {
+   (void)argc;
+   (void)argv;
+
+   const std::string executablePath = get_executable_path();
+   const std::string executableDir = get_executable_dir();
+   if (executablePath.empty() || executableDir.empty())
+   {
+      std::cerr << "Failed to get executable path.\n";
+      return 1;
+   }
+
+   const std::string configPath = executableDir + "\\MiniHost.def";
+   std::cout << "Executable path: " << executablePath << std::endl;
+   std::cout << "Config path: " << configPath << std::endl;
+
    CigiInSz = 0;
    
-   ReadConfig();
+   ReadConfig(configPath);
    
    if(dblist.empty())
    {
@@ -412,7 +448,7 @@ int main(int argc, char* argv[])
 // ================================================
 // Read Configuration
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-void ReadConfig(void)
+void ReadConfig(const std::string& configPath)
 {
    
    TiXmlNode *bnode = NULL;  // base node
@@ -430,7 +466,7 @@ void ReadConfig(void)
    
    
    
-   TiXmlDocument doc("MiniHost.def");
+   TiXmlDocument doc(configPath.c_str());
    bool stat = doc.LoadFile();
    
    //set default values
